@@ -1,27 +1,166 @@
-# Primeng16Listbox
+# PrimeNG16: リストボックスを表示する
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+## Angularのワークスペースを作成する
 
-## Development server
+```
+npx ng new primeng16-listbox
+? Would you like to add Angular routing? (y/N)   -> [Yes]
+? Which stylesheet format would you like to use? -> [SCSS]
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## AngularのワークスペースにPrimeNGをインストールする
 
-## Code scaffolding
+```
+cd primeng16-listbox
+npm view primeng versions
+npm install primeng@16.0.2
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## PrimeNGの初期設定を行う
 
-## Build
+src/style.scss
+```
+/* PrimeNG Theme */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+body {
+    /* PrimeNG Theme Font */
+    font-family: var(--font-family);
+}
+```
 
-## Running unit tests
+src/app/app.module.ts
+```
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+@NgModule({
+    imports: [
+        BrowserAnimationsModule
+    ],
+})
+export class AppModule { }
+```
 
-## Running end-to-end tests
+## 画面1のコンポーネントを追加する
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
+cd primeng16-listbox
+npx ng generate component gamen1
+npx ng generate component page-not-found
+```
 
-## Further help
+## 画面1のコンポーネントを表示する
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+src/app/app.component.html
+```
+<router-outlet></router-outlet>
+```
+
+src/app/app-routing.module.ts
+```
+import { Gamen1Component } from './gamen1/gamen1.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
+const routes: Routes = [
+    { path: 'gamen1', component: Gamen1Component },
+    { path: '', redirectTo: '/gamen1', pathMatch: 'full' },
+    { path: '**', component: PageNotFoundComponent }
+];
+
+@NgModule({
+    imports: [RouterModule.forRoot(routes, { enableTracing: true })],
+    exports: [RouterModule]
+})
+```
+
+## リストボックス用にngModelのモジュールをインポートする
+
+src/app/app.module.ts
+```
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+    imports: [
+        FormsModule
+    ],
+})
+export class AppModule { }
+```
+
+## リストボックスのモジュールをインポートする
+
+src/app/app.module.ts
+```
+import { ListboxModule } from 'primeng/listbox';
+
+@NgModule({
+    imports: [
+        ListboxModule
+    ],
+})
+export class AppModule { }
+```
+
+## 画面1にリストボックスのコンポーネントを追加する
+
+src/app/gamen1/gamen1.component.html
+```
+<div style="display:flex;flex-direction:column;">
+    <p-listbox
+        [options]="dataProvider"
+        [(ngModel)]="dataProvider_selectedValue"
+        optionLabel="name"
+        [style]="{'width':'300px','height':'400px'}"
+    ></p-listbox>
+    <p>SelectedItem: {{ dataProvider_selectedValue?.name }}</p>
+</div>
+```
+
+src/app/gamen1/gamen1.component.ts
+```
+import { Component, OnInit } from '@angular/core';
+
+class DataProviderItem {
+    name: string = "";
+}
+
+@Component({
+    selector: 'app-gamen1',
+    templateUrl: './gamen1.component.html',
+    styleUrls: ['./gamen1.component.scss']
+})
+export class Gamen1Component implements OnInit {
+
+    dataProvider: DataProviderItem[] = [];
+    dataProvider_selectedValue: DataProviderItem | null = null;
+
+    ngOnInit(): void {
+        let item: DataProviderItem | null = null;
+
+        item = new DataProviderItem();
+        item.name = "ふくむらみずき";
+        this.dataProvider.push(item);
+
+        item = new DataProviderItem();
+        item.name = "いくたえりな";
+        this.dataProvider.push(item);
+
+        item = new DataProviderItem();
+        item.name = "いしだあゆみ";
+        this.dataProvider.push(item);
+    }
+}
+```
+
+## ローカルで実行する。
+
+```
+npx ng serve
+```
+
+## ブラウザで表示する。
+
+```
+http://localhost:4200/
+```
