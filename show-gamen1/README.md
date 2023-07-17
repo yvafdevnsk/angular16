@@ -1,27 +1,53 @@
-# ShowGamen1
+# 画面1を表示する
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+## ワークスペースを作成する
 
-## Development server
+```
+npx ng new show-gamen1
+? Would you like to add Angular routing? (y/N)   -> [Yes]
+? Which stylesheet format would you like to use? -> [SCSS]
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 画面1のコンポーネントを追加する
 
-## Code scaffolding
+```
+cd show-gamen1
+npx ng generate component gamen1
+npx ng generate component page-not-found
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 画面1のコンポーネントを表示する
 
-## Build
+src/app/app.component.html
+```
+<router-outlet></router-outlet>
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+src/app/app-routing.module.ts
+```
+import { Gamen1Component } from './gamen1/gamen1.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
-## Running unit tests
+const routes: Routes = [
+    { path: 'gamen1', component: Gamen1Component },
+    { path: '', redirectTo: '/gamen1', pathMatch: 'full' },
+    { path: '**', component: PageNotFoundComponent }
+];
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+@NgModule({
+    imports: [RouterModule.forRoot(routes, { enableTracing: true })],
+    exports: [RouterModule]
+})
+```
 
-## Running end-to-end tests
+## ローカルで実行する
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
+npx ng serve
+```
 
-## Further help
+## ブラウザで表示する
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```
+http://localhost:4200/
+```
