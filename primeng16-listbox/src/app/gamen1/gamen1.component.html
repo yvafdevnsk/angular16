@@ -1,0 +1,9 @@
+<div style="display:flex;flex-direction:column;">
+    <p-listbox
+        [options]="dataProvider"
+        [(ngModel)]="dataProvider_selectedValue"
+        optionLabel="name"
+        [style]="{'width':'300px','height':'400px'}"
+    ></p-listbox>
+    <p>SelectedItem: {{ dataProvider_selectedValue?.name }}</p>
+</div>
